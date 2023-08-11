@@ -7,6 +7,12 @@
 
 ## How to run the application locally
 
+First, you'll need to install the project's dependencies by running:
+
+```bash
+$ npm install
+```
+
 Running `npm run preview` will build a production version of the app and serve it up with a local web server.
 The command will print the URL that the server is located at, like this:
 

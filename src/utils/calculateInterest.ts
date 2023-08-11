@@ -11,7 +11,7 @@ export type InterestCalculationInput = {
   startingBalance: number;
   interestRate: number;
   investmentTermInMonths: number;
-  payoutFrequency: PayoutFrequency.Monthly | PayoutFrequency.AtMaturity;
+  payoutFrequency: PayoutFrequency;
 };
 
 export type InterestCalculationResult = {
@@ -74,11 +74,15 @@ export function calculateInterest(
 }
 
 function getCompoundingFrequency(
-  payoutFrequency: PayoutFrequency.Monthly | PayoutFrequency.AtMaturity,
+  payoutFrequency: PayoutFrequency,
 ): number | undefined {
   switch (payoutFrequency) {
     case PayoutFrequency.Monthly:
       return 12;
+    case PayoutFrequency.Quarterly:
+      return 4;
+    case PayoutFrequency.Annually:
+      return 1;
     case PayoutFrequency.AtMaturity:
       return undefined;
   }

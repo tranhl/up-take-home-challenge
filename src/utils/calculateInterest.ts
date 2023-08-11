@@ -10,8 +10,8 @@ export enum PayoutFrequency {
 export type InterestCalculationInput = {
   startingBalance: number;
   interestRate: number;
-  investmentTermInYears: number;
-  payoutFrequency: PayoutFrequency;
+  investmentTermInMonths: number;
+  payoutFrequency: PayoutFrequency.Monthly | PayoutFrequency.AtMaturity;
 };
 
 export type InterestCalculationResult = {
@@ -33,26 +33,66 @@ export type InterestCalculationResult = {
 export function calculateInterest(
   inputs: InterestCalculationInput,
 ): InterestCalculationResult {
-  const { startingBalance, interestRate, investmentTermInYears } = inputs;
+  const {
+    startingBalance,
+    interestRate: interestRateAsNumber,
+    investmentTermInMonths,
+    payoutFrequency,
+  } = inputs;
 
-  if (!Number.isInteger(investmentTermInYears) || investmentTermInYears <= 0)
+  if (!Number.isInteger(investmentTermInMonths) || investmentTermInMonths <= 0)
     throw new TypeError(
       "`investmentTermInYears` must be an integer greater than 0",
     );
 
-  const paymentFrequencyAsNumber = 12;
+  const interestRate = interestRateAsNumber / 100;
+  const compoundFrequency = getCompoundingFrequency(payoutFrequency);
 
-  const finalBalance =
-    startingBalance *
-    (1 + interestRate / 100 / paymentFrequencyAsNumber) **
-      (paymentFrequencyAsNumber * investmentTermInYears);
+  const finalBalance = compoundFrequency
+    ? calculateCompoundInterest(
+        startingBalance,
+        interestRate,
+        compoundFrequency,
+        investmentTermInMonths / 12,
+      )
+    : calculateSimpleInterest(
+        startingBalance,
+        interestRate,
+        investmentTermInMonths / 12,
+      );
+
   const interestEarned = finalBalance - startingBalance;
   const interestEarnedAtPresentValue =
-    interestEarned * (1 + INFLATION_RATE / 100) ** -investmentTermInYears;
+    interestEarned *
+    (1 + INFLATION_RATE / 100) ** -(investmentTermInMonths / 12);
 
   return {
     finalBalance: Math.round(finalBalance),
     interestEarned: Math.round(interestEarned),
     interestEarnedAtPresentValue: Math.round(interestEarnedAtPresentValue),
   };
+}
+
+function getCompoundingFrequency(
+  payoutFrequency: PayoutFrequency.Monthly | PayoutFrequency.AtMaturity,
+): number | undefined {
+  switch (payoutFrequency) {
+    case PayoutFrequency.Monthly:
+      return 12;
+    case PayoutFrequency.AtMaturity:
+      return undefined;
+  }
+}
+
+function calculateCompoundInterest(
+  P: number,
+  r: number,
+  n: number,
+  t: number,
+): number {
+  return P * Math.pow(1 + r / n, n * t);
+}
+
+function calculateSimpleInterest(P: number, r: number, t: number) {
+  return P * (1 + r * t);
 }

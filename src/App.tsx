@@ -118,12 +118,20 @@ function App() {
               <h1>Result</h1>
               <FormControl>
                 <FormLabel>Final balance</FormLabel>
-                <Input readOnly startDecorator="$" value={finalBalance} />
+                <Input
+                  readOnly
+                  startDecorator="$"
+                  value={Math.round(finalBalance)}
+                />
               </FormControl>
 
               <FormControl>
                 <FormLabel>Interest earned</FormLabel>
-                <Input readOnly startDecorator="$" value={interestEarned} />
+                <Input
+                  readOnly
+                  startDecorator="$"
+                  value={Math.round(interestEarned)}
+                />
               </FormControl>
 
               <FormControl>
@@ -131,7 +139,7 @@ function App() {
                 <Input
                   readOnly
                   startDecorator="$"
-                  value={interestEarnedAtPresentValue}
+                  value={Math.round(interestEarnedAtPresentValue)}
                 />
               </FormControl>
             </Card>

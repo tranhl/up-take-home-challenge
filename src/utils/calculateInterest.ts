@@ -22,7 +22,7 @@ export type InterestCalculationResult = {
 
 /**
  * Calculate interest based on the compound interest formula.
- * Resulting values will be rounded to the nearest dollar.
+ * Calculated values are unrounded.
  *
  * The calculator makes the following assumptions:
  * - All payment frequencies are of equal length.
@@ -67,9 +67,9 @@ export function calculateInterest(
     (1 + INFLATION_RATE / 100) ** -(investmentTermInMonths / 12);
 
   return {
-    finalBalance: Math.round(finalBalance),
-    interestEarned: Math.round(interestEarned),
-    interestEarnedAtPresentValue: Math.round(interestEarnedAtPresentValue),
+    finalBalance,
+    interestEarned,
+    interestEarnedAtPresentValue,
   };
 }
 

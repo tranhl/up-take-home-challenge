@@ -1,6 +1,5 @@
 import {
   InterestCalculationInput,
-  InterestCalculationResult,
   PayoutFrequency,
   calculateInterest,
 } from "./calculateInterest";
@@ -14,13 +13,11 @@ describe("calculateInterest()", () => {
       payoutFrequency: PayoutFrequency.Monthly,
     };
 
-    const expected: InterestCalculationResult = {
-      finalBalance: 13157,
-      interestEarned: 3157,
-      interestEarnedAtPresentValue: 2790,
-    };
+    const result = calculateInterest(input);
 
-    expect(calculateInterest(input)).toStrictEqual(expected);
+    expect(Math.round(result.finalBalance)).toBe(13157);
+    expect(Math.round(result.interestEarned)).toBe(3157);
+    expect(Math.round(result.interestEarnedAtPresentValue)).toBe(2790);
   });
 
   test("should correctly calculate interest when payout is quarterly", () => {
@@ -31,13 +28,11 @@ describe("calculateInterest()", () => {
       payoutFrequency: PayoutFrequency.Quarterly,
     };
 
-    const expected: InterestCalculationResult = {
-      finalBalance: 13141,
-      interestEarned: 3141,
-      interestEarnedAtPresentValue: 2776,
-    };
+    const result = calculateInterest(input);
 
-    expect(calculateInterest(input)).toStrictEqual(expected);
+    expect(Math.round(result.finalBalance)).toBe(13141);
+    expect(Math.round(result.interestEarned)).toBe(3141);
+    expect(Math.round(result.interestEarnedAtPresentValue)).toBe(2776);
   });
 
   test("should correctly calculate interest when payout is annually", () => {
@@ -48,13 +43,11 @@ describe("calculateInterest()", () => {
       payoutFrequency: PayoutFrequency.Annually,
     };
 
-    const expected: InterestCalculationResult = {
-      finalBalance: 13070,
-      interestEarned: 3070,
-      interestEarnedAtPresentValue: 2713,
-    };
+    const result = calculateInterest(input);
 
-    expect(calculateInterest(input)).toStrictEqual(expected);
+    expect(Math.round(result.finalBalance)).toBe(13070);
+    expect(Math.round(result.interestEarned)).toBe(3070);
+    expect(Math.round(result.interestEarnedAtPresentValue)).toBe(2713);
   });
 
   test("should correctly calculate interest when payout as at maturity", () => {
@@ -65,12 +58,10 @@ describe("calculateInterest()", () => {
       payoutFrequency: PayoutFrequency.AtMaturity,
     };
 
-    const expected: InterestCalculationResult = {
-      finalBalance: 12750,
-      interestEarned: 2750,
-      interestEarnedAtPresentValue: 2431,
-    };
+    const result = calculateInterest(input);
 
-    expect(calculateInterest(input)).toStrictEqual(expected);
+    expect(Math.round(result.finalBalance)).toBe(12750);
+    expect(Math.round(result.interestEarned)).toBe(2750);
+    expect(Math.round(result.interestEarnedAtPresentValue)).toBe(2431);
   });
 });

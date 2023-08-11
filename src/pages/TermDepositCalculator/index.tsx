@@ -18,7 +18,10 @@ export function TermDepositCalculatorPage() {
         }}
         validationSchema={toFormikValidationSchema(
           object({
-            startingBalance: number().positive(),
+            startingBalance: number({
+              required_error: "Please enter a starting balance",
+              invalid_type_error: "Starting balance must be a number",
+            }).positive(),
             interestRate: number().positive(),
             investmentTermInMonths: number().positive().int(),
           }),

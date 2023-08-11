@@ -4,21 +4,31 @@ import { FormValues } from "./types";
 import { calculateInterest } from "../../utils/calculateInterest";
 
 export function Results() {
-  const { values } = useFormikContext<FormValues>();
+  const { values, dirty, isValid } = useFormikContext<FormValues>();
   const { finalBalance, interestEarned, interestEarnedAtPresentValue } =
     calculateInterest(values);
+
+  const hasErrors = dirty && !isValid;
 
   return (
     <Card>
       <h1>Result</h1>
       <FormControl>
         <FormLabel>Final balance</FormLabel>
-        <Input readOnly startDecorator="$" value={Math.round(finalBalance)} />
+        <Input
+          readOnly
+          startDecorator="$"
+          value={hasErrors ? 0 : Math.round(finalBalance)}
+        />
       </FormControl>
 
       <FormControl>
         <FormLabel>Interest earned</FormLabel>
-        <Input readOnly startDecorator="$" value={Math.round(interestEarned)} />
+        <Input
+          readOnly
+          startDecorator="$"
+          value={hasErrors ? 0 : Math.round(interestEarned)}
+        />
       </FormControl>
 
       <FormControl>
@@ -26,7 +36,7 @@ export function Results() {
         <Input
           readOnly
           startDecorator="$"
-          value={Math.round(interestEarnedAtPresentValue)}
+          value={hasErrors ? 0 : Math.round(interestEarnedAtPresentValue)}
         />
       </FormControl>
     </Card>

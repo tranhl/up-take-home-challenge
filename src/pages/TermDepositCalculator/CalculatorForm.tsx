@@ -1,46 +1,53 @@
-import {
-  Card,
-  Input,
-  Slider,
-  Select,
-  Option,
-  FormControl,
-  FormLabel,
-} from "@mui/joy";
+import { Card, Input, Slider, Select, Option, FormLabel } from "@mui/joy";
 import { useFormikContext } from "formik";
 import { FormValues } from "./types";
 import { PayoutFrequency } from "../../utils/calculateInterest";
 
 export function CalculatorForm() {
-  const { values, handleChange, setFieldValue } =
+  const { values, errors, handleChange, setFieldValue } =
     useFormikContext<FormValues>();
 
   return (
     <Card>
       <h1>Term Deposit Calculator</h1>
 
-      <FormControl>
-        <FormLabel>Starting balance</FormLabel>
+      <div>
+        <label>Starting balance</label>
         <Input
           name="startingBalance"
           startDecorator="$"
           value={values.startingBalance}
-          onChange={handleChange}
-        />
-      </FormControl>
+          error={!!errors.startingBalance}
+          onChange={(event) => {
+            const value = Number.parseFloat(event.target.value);
 
-      <FormControl>
+            setFieldValue(
+              "startingBalance",
+              isNaN(value) ? event.target.value : value,
+            );
+          }}
+        />
+        {errors.startingBalance ?? <span>{errors.startingBalance}</span>}
+      </div>
+
+      <div>
         <FormLabel>Interest rate</FormLabel>
         <Input
           name="interestRate"
+          type="number"
           endDecorator="%"
           placeholder="2.5"
+          slotProps={{
+            input: {
+              step: "0.1",
+            },
+          }}
           value={values.interestRate}
           onChange={handleChange}
         />
-      </FormControl>
+      </div>
 
-      <FormControl>
+      <div>
         <FormLabel>Investment term</FormLabel>
         <Input
           readOnly
@@ -58,9 +65,9 @@ export function CalculatorForm() {
           value={values.investmentTermInMonths}
           onChange={handleChange}
         />
-      </FormControl>
+      </div>
 
-      <FormControl>
+      <div>
         <FormLabel>Interest paid</FormLabel>
         <Select
           name="payoutFrequency"
@@ -72,7 +79,7 @@ export function CalculatorForm() {
           <Option value={PayoutFrequency.Annually}>Annually</Option>
           <Option value={PayoutFrequency.AtMaturity}>At maturity</Option>
         </Select>
-      </FormControl>
+      </div>
     </Card>
   );
 }

@@ -1,4 +1,3 @@
-import { FormikValues } from "formik";
 import { PayoutFrequency } from "../../utils/calculateInterest";
 
 export type FormValues = {

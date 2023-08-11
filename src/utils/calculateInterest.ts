@@ -1,4 +1,6 @@
-export enum PaymentFrequency {
+const INFLATION_RATE = 2.5;
+
+export enum PayoutFrequency {
   Monthly = "Monthly",
   Quarterly = "Quarterly",
   Annually = "Annually",
@@ -8,8 +10,8 @@ export enum PaymentFrequency {
 export type InterestCalculationInput = {
   startingBalance: number;
   interestRate: number;
-  investmentTermInMonths: number;
-  paymentFrequency: PaymentFrequency;
+  investmentTermInYears: number;
+  payoutFrequency: PayoutFrequency;
 };
 
 export type InterestCalculationResult = {
@@ -20,14 +22,37 @@ export type InterestCalculationResult = {
 
 /**
  * Calculate interest based on the compound interest formula.
- * Allows adjustment of the interest payment frequency.
+ * Resulting values will be rounded to the nearest dollar.
+ *
+ * The calculator makes the following assumptions:
+ * - All payment frequencies are of equal length.
+ * - There are 365 days in a year.
+ * - Balances are in dollar amounts, and in AUD.
+ * - Inflation is a steady 2.5% for the purposes of calculating real interest value.
  */
 export function calculateInterest(
   inputs: InterestCalculationInput,
 ): InterestCalculationResult {
+  const { startingBalance, interestRate, investmentTermInYears } = inputs;
+
+  if (!Number.isInteger(investmentTermInYears) || investmentTermInYears <= 0)
+    throw new TypeError(
+      "`investmentTermInYears` must be an integer greater than 0",
+    );
+
+  const paymentFrequencyAsNumber = 12;
+
+  const finalBalance =
+    startingBalance *
+    (1 + interestRate / 100 / paymentFrequencyAsNumber) **
+      (paymentFrequencyAsNumber * investmentTermInYears);
+  const interestEarned = finalBalance - startingBalance;
+  const interestEarnedAtPresentValue =
+    interestEarned * (1 + INFLATION_RATE / 100) ** -investmentTermInYears;
+
   return {
-    finalBalance: inputs.startingBalance,
-    interestEarned: 0,
-    interestEarnedAtPresentValue: 0,
+    finalBalance: Math.round(finalBalance),
+    interestEarned: Math.round(interestEarned),
+    interestEarnedAtPresentValue: Math.round(interestEarnedAtPresentValue),
   };
 }

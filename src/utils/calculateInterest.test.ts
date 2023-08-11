@@ -1,7 +1,7 @@
 import {
   InterestCalculationInput,
   InterestCalculationResult,
-  PaymentFrequency,
+  PayoutFrequency,
   calculateInterest,
 } from "./calculateInterest";
 
@@ -10,8 +10,8 @@ describe("calculateInterest()", () => {
     const input: InterestCalculationInput = {
       startingBalance: 10000,
       interestRate: 5.5,
-      investmentTermInMonths: 60,
-      paymentFrequency: PaymentFrequency.Monthly,
+      investmentTermInYears: 5,
+      payoutFrequency: PayoutFrequency.Monthly,
     };
 
     const expected: InterestCalculationResult = {
@@ -20,6 +20,6 @@ describe("calculateInterest()", () => {
       interestEarnedAtPresentValue: 2790,
     };
 
-    expect(calculateInterest(input)).toBe(expected);
+    expect(calculateInterest(input)).toStrictEqual(expected);
   });
 });

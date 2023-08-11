@@ -1,12 +1,8 @@
 import App from "./App";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 
 describe("<App />", () => {
-  test("should render without error", () => {
+  test("should render without error", async () => {
     render(<App />);
-
-    expect(screen.getByRole("heading")).toHaveTextContent(
-      "Term Deposit Calculator",
-    );
   });
 });

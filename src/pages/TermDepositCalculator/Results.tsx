@@ -1,4 +1,4 @@
-import { Card, Input, FormControl, FormLabel } from "@mui/joy";
+import { Card, Input, FormControl, FormLabel, Typography } from "@mui/joy";
 import { useFormikContext } from "formik";
 import { FormValues } from "./types";
 import * as calculators from "../../common/calculators";
@@ -25,7 +25,7 @@ export function Results() {
 
   return (
     <Card>
-      <h1>Result</h1>
+      <Typography level="h1">Result</Typography>
       <FormControl>
         <FormLabel>Final balance</FormLabel>
         <Input

@@ -1,4 +1,12 @@
-import { Card, Input, Slider, Select, Option, FormLabel } from "@mui/joy";
+import {
+  Card,
+  Input,
+  Slider,
+  Select,
+  Option,
+  FormLabel,
+  Typography,
+} from "@mui/joy";
 import { useFormikContext } from "formik";
 import { FormValues } from "./types";
 import { PayoutFrequency } from "../../common/calculators";
@@ -9,7 +17,7 @@ export function CalculatorForm() {
 
   return (
     <Card>
-      <h1>Term Deposit Calculator</h1>
+      <Typography level="h1">Term Deposit Calculator</Typography>
 
       <div>
         <label>Starting balance</label>

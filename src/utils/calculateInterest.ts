@@ -1,3 +1,5 @@
+import * as formulas from "../common/formulas";
+
 const INFLATION_RATE = 2.5;
 
 export enum PayoutFrequency {
@@ -9,7 +11,7 @@ export enum PayoutFrequency {
 
 export type InterestCalculationInput = {
   startingBalance: number;
-  interestRate: number;
+  interestRateInBasisPoints: number;
   investmentTermInMonths: number;
   payoutFrequency: PayoutFrequency;
 };
@@ -30,34 +32,29 @@ export type InterestCalculationResult = {
  * - Balances are in dollar amounts, and in AUD.
  * - Inflation is a steady 2.5% for the purposes of calculating real interest value.
  */
-export function calculateInterest(
-  inputs: InterestCalculationInput,
-): InterestCalculationResult {
-  const {
-    startingBalance,
-    interestRate: interestRateAsNumber,
-    investmentTermInMonths,
-    payoutFrequency,
-  } = inputs;
-
+export function calculateInterest({
+  startingBalance,
+  interestRateInBasisPoints,
+  investmentTermInMonths,
+  payoutFrequency,
+}: InterestCalculationInput): InterestCalculationResult {
   if (!Number.isInteger(investmentTermInMonths) || investmentTermInMonths <= 0)
     throw new TypeError(
       "`investmentTermInYears` must be an integer greater than 0",
     );
 
-  const interestRate = interestRateAsNumber / 100;
   const compoundFrequency = getCompoundingFrequency(payoutFrequency);
 
   const finalBalance = compoundFrequency
-    ? calculateCompoundInterest(
+    ? formulas.compoundInterest(
         startingBalance,
-        interestRate,
+        interestRateInBasisPoints,
         compoundFrequency,
         investmentTermInMonths / 12,
       )
-    : calculateSimpleInterest(
+    : formulas.simpleInterest(
         startingBalance,
-        interestRate,
+        interestRateInBasisPoints,
         investmentTermInMonths / 12,
       );
 
@@ -86,17 +83,4 @@ function getCompoundingFrequency(
     case PayoutFrequency.AtMaturity:
       return undefined;
   }
-}
-
-function calculateCompoundInterest(
-  P: number,
-  r: number,
-  n: number,
-  t: number,
-): number {
-  return P * Math.pow(1 + r / n, n * t);
-}
-
-function calculateSimpleInterest(P: number, r: number, t: number) {
-  return P * (1 + r * t);
 }

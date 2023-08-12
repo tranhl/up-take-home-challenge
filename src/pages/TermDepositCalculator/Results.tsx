@@ -6,7 +6,12 @@ import { calculateInterest } from "../../utils/calculateInterest";
 export function Results() {
   const { values, dirty, isValid } = useFormikContext<FormValues>();
   const { finalBalance, interestEarned, interestEarnedAtPresentValue } =
-    calculateInterest(values);
+    calculateInterest({
+      startingBalance: values.startingBalance,
+      interestRateInBasisPoints: values.interestRate * 100,
+      investmentTermInMonths: values.investmentTermInMonths,
+      payoutFrequency: values.payoutFrequency,
+    });
 
   const hasErrors = dirty && !isValid;
 

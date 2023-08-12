@@ -8,7 +8,7 @@ describe("calculateInterest()", () => {
   test("should correctly calculate interest when payout is monthly", () => {
     const input: InterestCalculationInput = {
       startingBalance: 10000,
-      interestRate: 5.5,
+      interestRateInBasisPoints: 550,
       investmentTermInMonths: 5 * 12,
       payoutFrequency: PayoutFrequency.Monthly,
     };
@@ -23,7 +23,7 @@ describe("calculateInterest()", () => {
   test("should correctly calculate interest when payout is quarterly", () => {
     const input: InterestCalculationInput = {
       startingBalance: 10000,
-      interestRate: 5.5,
+      interestRateInBasisPoints: 550,
       investmentTermInMonths: 5 * 12,
       payoutFrequency: PayoutFrequency.Quarterly,
     };
@@ -38,7 +38,7 @@ describe("calculateInterest()", () => {
   test("should correctly calculate interest when payout is annually", () => {
     const input: InterestCalculationInput = {
       startingBalance: 10000,
-      interestRate: 5.5,
+      interestRateInBasisPoints: 550,
       investmentTermInMonths: 5 * 12,
       payoutFrequency: PayoutFrequency.Annually,
     };
@@ -53,7 +53,7 @@ describe("calculateInterest()", () => {
   test("should correctly calculate interest when payout as at maturity", () => {
     const input: InterestCalculationInput = {
       startingBalance: 10000,
-      interestRate: 5.5,
+      interestRateInBasisPoints: 550,
       investmentTermInMonths: 5 * 12,
       payoutFrequency: PayoutFrequency.AtMaturity,
     };

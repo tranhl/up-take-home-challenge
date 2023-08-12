@@ -1,6 +1,6 @@
 import { Container, Grid } from "@mui/joy";
 import { Form, Formik } from "formik";
-import { PayoutFrequency } from "../../utils/calculateInterest";
+import { PayoutFrequency } from "../../common/calculators";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { object, number } from "zod";
 import { CalculatorForm } from "./CalculatorForm";

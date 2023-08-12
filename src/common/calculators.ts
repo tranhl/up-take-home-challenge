@@ -1,6 +1,4 @@
-import * as formulas from "../common/formulas";
-
-const INFLATION_RATE = 2.5;
+import * as formulas from "./formulas";
 
 export enum PayoutFrequency {
   Monthly = "Monthly",
@@ -19,20 +17,20 @@ export type InterestCalculationInput = {
 export type InterestCalculationResult = {
   finalBalance: number;
   interestEarned: number;
-  interestEarnedAtPresentValue: number;
 };
 
 /**
- * Calculate interest based on the compound interest formula.
- * Calculated values are unrounded.
+ * Calculate the final balance of a term deposit account.
  *
  * The calculator makes the following assumptions:
  * - All payment frequencies are of equal length.
  * - There are 365 days in a year.
  * - Balances are in dollar amounts, and in AUD.
  * - Inflation is a steady 2.5% for the purposes of calculating real interest value.
+ *
+ * @returns The final balance and the interest earned, unrounded.
  */
-export function calculateInterest({
+export function termDeposit({
   startingBalance,
   interestRateInBasisPoints,
   investmentTermInMonths,
@@ -59,14 +57,10 @@ export function calculateInterest({
       );
 
   const interestEarned = finalBalance - startingBalance;
-  const interestEarnedAtPresentValue =
-    interestEarned *
-    (1 + INFLATION_RATE / 100) ** -(investmentTermInMonths / 12);
 
   return {
     finalBalance,
     interestEarned,
-    interestEarnedAtPresentValue,
   };
 }
 
@@ -83,4 +77,20 @@ function getCompoundingFrequency(
     case PayoutFrequency.AtMaturity:
       return undefined;
   }
+}
+
+/**
+ * Calculates the present value of a future amount.
+ * Assumes that the rate is static across the investment term.
+ *
+ * @returns The present value.
+ */
+export function presentValue(
+  futureValue: number,
+  rateInBasisPoints: number,
+  investmentTermInYears: number,
+): number {
+  const rate = rateInBasisPoints / 10000;
+
+  return futureValue * (1 + rate) ** -investmentTermInYears;
 }

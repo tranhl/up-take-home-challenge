@@ -1,17 +1,25 @@
 import { Card, Input, FormControl, FormLabel } from "@mui/joy";
 import { useFormikContext } from "formik";
 import { FormValues } from "./types";
-import { calculateInterest } from "../../utils/calculateInterest";
+import * as calculators from "../../common/calculators";
+
+const INFLATION_RATE_IN_BASIS_POINTS = 250;
 
 export function Results() {
   const { values, dirty, isValid } = useFormikContext<FormValues>();
-  const { finalBalance, interestEarned, interestEarnedAtPresentValue } =
-    calculateInterest({
-      startingBalance: values.startingBalance,
-      interestRateInBasisPoints: values.interestRate * 100,
-      investmentTermInMonths: values.investmentTermInMonths,
-      payoutFrequency: values.payoutFrequency,
-    });
+
+  const { finalBalance, interestEarned } = calculators.termDeposit({
+    startingBalance: values.startingBalance,
+    interestRateInBasisPoints: values.interestRate * 100,
+    investmentTermInMonths: values.investmentTermInMonths,
+    payoutFrequency: values.payoutFrequency,
+  });
+
+  const interestEarnedAtPresentValue = calculators.presentValue(
+    interestEarned,
+    INFLATION_RATE_IN_BASIS_POINTS,
+    values.investmentTermInMonths / 12,
+  );
 
   const hasErrors = dirty && !isValid;
 

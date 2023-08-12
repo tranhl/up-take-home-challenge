@@ -1,7 +1,7 @@
 import { Card, Input, Slider, Select, Option, FormLabel } from "@mui/joy";
 import { useFormikContext } from "formik";
 import { FormValues } from "./types";
-import { PayoutFrequency } from "../../utils/calculateInterest";
+import { PayoutFrequency } from "../../common/calculators";
 
 export function CalculatorForm() {
   const { values, errors, handleChange, setFieldValue } =

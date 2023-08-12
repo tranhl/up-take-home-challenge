@@ -1,4 +1,4 @@
-import { PayoutFrequency } from "../../utils/calculateInterest";
+import { PayoutFrequency } from "../../common/calculators";
 
 export type FormValues = {
   startingBalance: number;

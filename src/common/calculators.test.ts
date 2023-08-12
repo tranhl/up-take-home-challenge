@@ -1,10 +1,11 @@
 import {
   InterestCalculationInput,
   PayoutFrequency,
-  calculateInterest,
-} from "./calculateInterest";
+  presentValue,
+  termDeposit,
+} from "./calculators";
 
-describe("calculateInterest()", () => {
+describe("termDeposit()", () => {
   test("should correctly calculate interest when payout is monthly", () => {
     const input: InterestCalculationInput = {
       startingBalance: 10000,
@@ -13,11 +14,10 @@ describe("calculateInterest()", () => {
       payoutFrequency: PayoutFrequency.Monthly,
     };
 
-    const result = calculateInterest(input);
+    const result = termDeposit(input);
 
     expect(Math.round(result.finalBalance)).toBe(13157);
     expect(Math.round(result.interestEarned)).toBe(3157);
-    expect(Math.round(result.interestEarnedAtPresentValue)).toBe(2790);
   });
 
   test("should correctly calculate interest when payout is quarterly", () => {
@@ -28,11 +28,10 @@ describe("calculateInterest()", () => {
       payoutFrequency: PayoutFrequency.Quarterly,
     };
 
-    const result = calculateInterest(input);
+    const result = termDeposit(input);
 
     expect(Math.round(result.finalBalance)).toBe(13141);
     expect(Math.round(result.interestEarned)).toBe(3141);
-    expect(Math.round(result.interestEarnedAtPresentValue)).toBe(2776);
   });
 
   test("should correctly calculate interest when payout is annually", () => {
@@ -43,11 +42,10 @@ describe("calculateInterest()", () => {
       payoutFrequency: PayoutFrequency.Annually,
     };
 
-    const result = calculateInterest(input);
+    const result = termDeposit(input);
 
     expect(Math.round(result.finalBalance)).toBe(13070);
     expect(Math.round(result.interestEarned)).toBe(3070);
-    expect(Math.round(result.interestEarnedAtPresentValue)).toBe(2713);
   });
 
   test("should correctly calculate interest when payout as at maturity", () => {
@@ -58,10 +56,17 @@ describe("calculateInterest()", () => {
       payoutFrequency: PayoutFrequency.AtMaturity,
     };
 
-    const result = calculateInterest(input);
+    const result = termDeposit(input);
 
     expect(Math.round(result.finalBalance)).toBe(12750);
     expect(Math.round(result.interestEarned)).toBe(2750);
-    expect(Math.round(result.interestEarnedAtPresentValue)).toBe(2431);
+  });
+});
+
+describe("presentValue()", () => {
+  test("should correctly calculate present value", () => {
+    const result = presentValue(5000, 250, 5);
+
+    expect(result.toFixed(2)).toBe("4419.27");
   });
 });
